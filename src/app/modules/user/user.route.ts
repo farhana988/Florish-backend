@@ -19,4 +19,14 @@ router.post(
 );
 
 router.get("/all-user", auth(UserRole.SUPER_ADMIN), UserController.getAllUsers);
+
+// UPDATE USER
+router.patch(
+  "/:id",
+  auth(),
+  fileUploader.upload.single("file"),
+  UserController.updateUserInfo
+);
+
+
 export const userRoutes = router;

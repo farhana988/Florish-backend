@@ -88,7 +88,31 @@ const getAllUsers = async (params: any, options: IOptions) => {
     data: result,
   };
 };
+
+// UPDATE USER
+const updateUserInfo = async (req: Request) => {
+  const { id } = req.params;
+
+  const allowedFields: Record<string, any> = {};
+
+  if (req.body.name) allowedFields.name = req.body.name;
+  if (req.body.address) allowedFields.address = req.body.address;
+
+  if (req.file) {
+    const uploadResult = await fileUploader.uploadToCloudinary(req.file);
+    allowedFields.profilePhoto = uploadResult?.secure_url;
+  }
+
+  const result = await prisma.user.update({
+    where: { id },
+    data: allowedFields,
+  });
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
+  updateUserInfo,
 };

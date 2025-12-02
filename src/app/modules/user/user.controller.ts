@@ -30,7 +30,22 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+
+// UPDATE USER
+const updateUserInfo = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.updateUserInfo(req);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User info updated successfully!",
+    data: result,
+  });
+});
+
+
 export const UserController = {
   createUser,
   getAllUsers,
+  updateUserInfo
 };
