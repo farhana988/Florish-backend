@@ -37,6 +37,17 @@ const login = async (payload: { email: string; password: string }) => {
   };
 };
 
+const getCurrentUser = async (email: string) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { email },
+  });
+
+  const { password, ...userWithoutPassword } = user;
+
+  return userWithoutPassword;
+};
+
 export const AuthService = {
   login,
+  getCurrentUser,
 };
