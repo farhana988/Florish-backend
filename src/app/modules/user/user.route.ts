@@ -20,12 +20,24 @@ router.post(
 
 router.get("/all-user", auth(UserRole.SUPER_ADMIN), UserController.getAllUsers);
 
+router.patch(
+  "/change-password",
+  auth(), 
+  UserController.changePassword
+);
+
 // UPDATE USER
 router.patch(
   "/:id",
   auth(),
   fileUploader.upload.single("file"),
   UserController.updateUserInfo
+);
+// BLOCK USER 
+router.patch(
+  "/block/:id",
+  auth(UserRole.SUPER_ADMIN),
+  UserController.blockUser
 );
 
 

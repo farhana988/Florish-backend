@@ -31,6 +31,17 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const changePassword = catchAsync(async (req, res) => {
+  const result = await UserService.changePassword(req);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Password changed successfully!",
+    data: result,
+  });
+});
+
 // UPDATE USER
 const updateUserInfo = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.updateUserInfo(req);
@@ -43,9 +54,22 @@ const updateUserInfo = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// BLOCK USER
+const blockUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.blockUser(req);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User blocked successfully!",
+    data: result,
+  });
+});
 
 export const UserController = {
   createUser,
   getAllUsers,
-  updateUserInfo
+  updateUserInfo,
+  blockUser,
+  changePassword
 };

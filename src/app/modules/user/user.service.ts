@@ -89,6 +89,33 @@ const getAllUsers = async (params: any, options: IOptions) => {
   };
 };
 
+const changePassword = async (req: Request) => {
+  const email = (req as any).user?.email;
+
+  if (!email) throw new Error("User not authenticated");
+
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword)
+    throw new Error("Old and new password required");
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error("User not found");
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) throw new Error("Old password is incorrect");
+
+  const saltRounds = Number(config.bcrypt.salt_rounds);
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+  const updatedUser = await prisma.user.update({
+    where: { email },
+    data: { password: hashedPassword, needPasswordChange: false },
+  });
+
+  const { password, ...safeUser } = updatedUser;
+  return safeUser;
+};
+
 // UPDATE USER
 const updateUserInfo = async (req: Request) => {
   const { id } = req.params;
@@ -111,8 +138,22 @@ const updateUserInfo = async (req: Request) => {
   return result;
 };
 
+// BLOCK USER
+const blockUser = async (req: Request) => {
+  const { id } = req.params;
+
+  const result = await prisma.user.update({
+    where: { id },
+    data: { isBlocked: true },
+  });
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
   updateUserInfo,
+  blockUser,
+  changePassword,
 };
