@@ -27,4 +27,9 @@ export default {
     access_expires_in: requireEnv("JWT_ACCESS_EXPIRES_IN"),
     refresh_expires_in: requireEnv("JWT_REFRESH_EXPIRES_IN"),
   },
+  super_admin: {
+    superAdminEmail: requireEnv("SUPER_ADMIN_EMAIL"),
+    superAdminPassword: requireEnv("SUPER_ADMIN_PASSWORD"),
+    superAdminName: requireEnv("SUPER_ADMIN_NAME"),
+  },
 };
