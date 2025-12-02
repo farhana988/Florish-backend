@@ -33,11 +33,19 @@ router.patch(
   fileUploader.upload.single("file"),
   UserController.updateUserInfo
 );
+
 // BLOCK USER 
 router.patch(
   "/block/:id",
   auth(UserRole.SUPER_ADMIN),
   UserController.blockUser
+);
+
+// MAKE ADMIN 
+router.patch(
+  "/make-admin/:id",
+  auth(UserRole.SUPER_ADMIN), 
+  UserController.makeAdmin
 );
 
 

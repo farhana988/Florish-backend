@@ -66,10 +66,23 @@ const blockUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// MAKE ADMIN
+const makeAdmin = catchAsync(async (req, res) => {
+  const result = await UserService.makeAdmin(req.params.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User promoted to Admin successfully!",
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   getAllUsers,
   updateUserInfo,
   blockUser,
-  changePassword
+  changePassword,
+  makeAdmin,
 };

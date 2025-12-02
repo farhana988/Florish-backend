@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { fileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
 import { IOptions, paginationHelper } from "../../helper/paginationHelper";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserRole } from "@prisma/client";
 import { userSearchableFields } from "./user.constant";
 
 const createUser = async (req: Request) => {
@@ -150,10 +150,29 @@ const blockUser = async (req: Request) => {
   return result;
 };
 
+// MAKE ADMIN
+const makeAdmin = async (userId: string) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new Error("User not found");
+
+  if (user.role === UserRole.ADMIN) {
+    throw new Error("User is already an Admin");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { role: UserRole.ADMIN },
+  });
+
+  const { password, ...safeUser } = updatedUser;
+  return safeUser;
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
   updateUserInfo,
   blockUser,
   changePassword,
+  makeAdmin,
 };
