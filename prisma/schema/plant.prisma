@@ -1,0 +1,18 @@
+model Plant {
+  id          String   @id @default(uuid())
+  name        String
+  category    String
+  price       Decimal  @db.Decimal(10, 2)
+  rating      Float?   @default(0)
+  image       String   
+  badge       String?  
+  quantity    Int      @default(1)
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userEmail   String
+  user        User     @relation( fields: [userEmail], references: [email])
+  
+  @@map("plants")
+}
