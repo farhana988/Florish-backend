@@ -2,8 +2,12 @@ import { z } from "zod";
 
 export const createPlantSchema = z.object({
   body: z.object({
-    name: z.string().min(1, "Name is required"),
-    category: z.string().min(1, "Category is required"),
+    name: z
+      .string({ message: "Name must be a string" })
+      .min(1, "Name is required"),
+    category: z
+      .string({ message: "Category must be a string" })
+      .min(1, "Category is required"),
     price: z
       .number({ message: "Price must be a number" })
       .positive("Price must be a positive number"),
@@ -21,4 +25,8 @@ export const createPlantSchema = z.object({
       .positive("Quantity must be greater than 0"),
     description: z.string({ message: "Description is required" }),
   }),
+});
+
+export const updatePlantSchema = z.object({
+  body: createPlantSchema.shape.body.partial(),
 });

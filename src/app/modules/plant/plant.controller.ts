@@ -36,8 +36,20 @@ const getAllPlants = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+// Update Plant
+const updatePlant = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await PlantService.updatePlant(id, req.body);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Plant updated successfully!",
+    data: result,
+  });
+});
 
 export const PlantController = {
   createPlant,
   getAllPlants,
+  updatePlant,
 };

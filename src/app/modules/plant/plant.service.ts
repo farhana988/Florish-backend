@@ -30,7 +30,17 @@ const getAllPlants = async () => {
   return plants;
 };
 
+// Update plant by id
+const updatePlant = async (id: string, payload: any) => {
+  const updatedPlant = await prisma.plant.update({
+    where: { id },
+    data: payload,
+  });
+  return updatedPlant;
+};
+
 export const PlantService = {
   createPlant,
   getAllPlants,
+  updatePlant,
 };
