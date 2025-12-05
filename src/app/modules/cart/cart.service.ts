@@ -68,6 +68,28 @@ const addToCart = async (userId: string, itemData: AddToCart) => {
 
 // Update cart item
 const updateCartItem = async (itemData: UpdateCartItem) => {
+  if (itemData.quantity <= 0) {
+    throw new Error("Quantity must be at least 1.");
+  }
+
+  // Find the cart item
+  const existingItem = await prisma.cartItem.findUnique({
+    where: { id: itemData.itemId },
+    include: { plant: true },
+  });
+
+  if (!existingItem) {
+    throw new Error("Cart item not found!");
+  }
+
+  const plant = existingItem.plant;
+
+  // Check available stock
+  if (itemData.quantity > plant.quantity) {
+    throw new Error(
+      `Cannot set quantity to ${itemData.quantity}. Only ${plant.quantity} available in stock.`
+    );
+  }
   return prisma.cartItem.update({
     where: { id: itemData.itemId },
     data: { quantity: itemData.quantity },

@@ -15,6 +15,7 @@ model Plant {
   user        User     @relation( fields: [userEmail], references: [email])
 
   cartItems   CartItem[]
+  orderItems  OrderItem[]
   
   @@map("plants")
 }
