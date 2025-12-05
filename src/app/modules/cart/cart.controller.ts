@@ -17,6 +17,7 @@ const getCart = catchAsync(
     });
   }
 );
+
 // Add item to cart
 const addToCart = catchAsync(
   async (req: Request & { user?: { id: string } }, res: Response) => {
@@ -44,7 +45,23 @@ const addToCart = catchAsync(
   }
 );
 
+// Update cart item
+const updateCartItem = catchAsync(async (req: Request, res: Response) => {
+  const { itemId } = req.params;
+  const { quantity } = req.body;
+
+  const updated = await CartService.updateCartItem({ itemId, quantity });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Cart item updated successfully!",
+    data: updated,
+  });
+});
+
 export const CartController = {
   getCart,
   addToCart,
+  updateCartItem,
 };

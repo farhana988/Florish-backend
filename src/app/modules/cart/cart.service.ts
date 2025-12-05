@@ -1,5 +1,5 @@
 import { prisma } from "../../shared/prisma";
-import { AddToCart } from "./cart.interface";
+import { AddToCart, UpdateCartItem } from "./cart.interface";
 
 const getCart = async (userId: string) => {
   // Get or create cart
@@ -17,6 +17,7 @@ const getCart = async (userId: string) => {
 
   return cart;
 };
+
 const addToCart = async (userId: string, itemData: AddToCart) => {
   const cart = await getCart(userId);
 
@@ -63,7 +64,15 @@ const addToCart = async (userId: string, itemData: AddToCart) => {
   });
 };
 
+const updateCartItem = async (itemData: UpdateCartItem) => {
+  return prisma.cartItem.update({
+    where: { id: itemData.itemId },
+    data: { quantity: itemData.quantity },
+    include: { plant: true },
+  });
+};
 export const CartService = {
   getCart,
   addToCart,
+  updateCartItem,
 };

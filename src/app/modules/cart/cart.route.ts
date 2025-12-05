@@ -5,5 +5,5 @@ import { CartController } from "./cart.controller";
 const router = express.Router();
 router.get("/", auth(), CartController.getCart);
 router.post("/add-to-cart", auth(), CartController.addToCart);
-
+router.patch("/update-cart/:itemId", auth(), CartController.updateCartItem);
 export const cartRoutes = router;
