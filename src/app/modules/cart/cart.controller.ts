@@ -3,6 +3,20 @@ import catchAsync from "../../shared/catchAsync";
 import { CartService } from "./cart.service";
 import sendResponse from "../../shared/sendResponse";
 
+// Get user's cart
+const getCart = catchAsync(
+  async (req: Request & { user?: { id: string } }, res: Response) => {
+    const userId = req.user!.id;
+    const cart = await CartService.getCart(userId);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Cart retrieved successfully!",
+      data: cart,
+    });
+  }
+);
 // Add item to cart
 const addToCart = catchAsync(
   async (req: Request & { user?: { id: string } }, res: Response) => {
@@ -31,5 +45,6 @@ const addToCart = catchAsync(
 );
 
 export const CartController = {
+  getCart,
   addToCart,
 };

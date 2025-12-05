@@ -64,5 +64,6 @@ const addToCart = async (userId: string, itemData: AddToCart) => {
 };
 
 export const CartService = {
+  getCart,
   addToCart,
 };
