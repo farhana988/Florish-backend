@@ -38,9 +38,16 @@ const updatePlant = async (id: string, payload: any) => {
   });
   return updatedPlant;
 };
-
+// Delete plant by id
+const deletePlant = async (id: string) => {
+  const deletedPlant = await prisma.plant.delete({
+    where: { id },
+  });
+  return deletedPlant;
+};
 export const PlantService = {
   createPlant,
   getAllPlants,
   updatePlant,
+  deletePlant,
 };

@@ -47,9 +47,20 @@ const updatePlant = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+// Delete Plant
+const deletePlant = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await PlantService.deletePlant(id);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Plant deleted successfully!",
+    data: result,
+  });
+});
 export const PlantController = {
   createPlant,
   getAllPlants,
   updatePlant,
+  deletePlant,
 };

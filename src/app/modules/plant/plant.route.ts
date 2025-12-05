@@ -20,4 +20,10 @@ router.patch(
   validateRequest(updatePlantSchema),
   PlantController.updatePlant
 );
+// Delete Plant
+router.delete(
+  "/delete-plant/:id",
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  PlantController.deletePlant
+);
 export const plantRoutes = router;
