@@ -1,6 +1,7 @@
 import { prisma } from "../../shared/prisma";
 import { AddToCart, UpdateCartItem } from "./cart.interface";
 
+// Get user's cart
 const getCart = async (userId: string) => {
   // Get or create cart
   let cart = await prisma.cart.findUnique({
@@ -18,6 +19,7 @@ const getCart = async (userId: string) => {
   return cart;
 };
 
+// Add item to cart
 const addToCart = async (userId: string, itemData: AddToCart) => {
   const cart = await getCart(userId);
 
@@ -64,6 +66,7 @@ const addToCart = async (userId: string, itemData: AddToCart) => {
   });
 };
 
+// Update cart item
 const updateCartItem = async (itemData: UpdateCartItem) => {
   return prisma.cartItem.update({
     where: { id: itemData.itemId },
@@ -72,10 +75,19 @@ const updateCartItem = async (itemData: UpdateCartItem) => {
   });
 };
 
+// Remove cart item
 const removeCartItem = async (itemId: string) => {
   return prisma.cartItem.delete({
     where: { id: itemId },
   });
+};
+
+// Clear cart
+const clearCart = async (userId: string) => {
+  const cart = await prisma.cart.findUnique({ where: { userId } });
+  if (!cart) return;
+
+  return prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
 };
 
 export const CartService = {
@@ -83,4 +95,5 @@ export const CartService = {
   addToCart,
   updateCartItem,
   removeCartItem,
+  clearCart,
 };

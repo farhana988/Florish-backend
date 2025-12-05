@@ -11,4 +11,6 @@ router.delete(
   auth(),
   CartController.removeCartItem
 );
+router.delete("/clear-cart", auth(), CartController.clearCart);
+
 export const cartRoutes = router;
