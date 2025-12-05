@@ -71,8 +71,16 @@ const updateCartItem = async (itemData: UpdateCartItem) => {
     include: { plant: true },
   });
 };
+
+const removeCartItem = async (itemId: string) => {
+  return prisma.cartItem.delete({
+    where: { id: itemId },
+  });
+};
+
 export const CartService = {
   getCart,
   addToCart,
   updateCartItem,
+  removeCartItem,
 };

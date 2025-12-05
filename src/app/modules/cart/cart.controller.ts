@@ -60,8 +60,23 @@ const updateCartItem = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Remove cart item
+const removeCartItem = catchAsync(async (req: Request, res: Response) => {
+  const { itemId } = req.params;
+
+  await CartService.removeCartItem(itemId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Cart item removed successfully!",
+    data: null,
+  });
+});
+
 export const CartController = {
   getCart,
   addToCart,
   updateCartItem,
+  removeCartItem,
 };
