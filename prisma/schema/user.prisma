@@ -12,5 +12,7 @@ model User {
     updatedAt          DateTime   @updatedAt
 
     plants             Plant[]   
+    cart               Cart?  
+
     @@map("users")
 }

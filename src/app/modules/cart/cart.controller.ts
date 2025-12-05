@@ -1,0 +1,35 @@
+import { Request, Response } from "express";
+import catchAsync from "../../shared/catchAsync";
+import { CartService } from "./cart.service";
+import sendResponse from "../../shared/sendResponse";
+
+// Add item to cart
+const addToCart = catchAsync(
+  async (req: Request & { user?: { id: string } }, res: Response) => {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return sendResponse(res, {
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized: User not found",
+        data: null,
+      });
+    }
+
+    const { plantId, quantity } = req.body;
+
+    const item = await CartService.addToCart(userId, { plantId, quantity });
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Added to cart successfully!",
+      data: item,
+    });
+  }
+);
+
+export const CartController = {
+  addToCart,
+};

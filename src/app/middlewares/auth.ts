@@ -17,7 +17,12 @@ const auth = (...roles: string[]) => {
 
       const verifyUser = jwtHelper.verifyToken(token, config.jwt.access_secret);
 
-      req.user = verifyUser;
+      req.user = {
+        id: verifyUser.id,
+        email: verifyUser.email,
+        role: verifyUser.role,
+        ...verifyUser,
+      };
 
       if (roles.length && !roles.includes(verifyUser.role)) {
         throw new Error("You are not authorized!");
