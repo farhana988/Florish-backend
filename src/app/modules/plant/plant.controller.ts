@@ -36,6 +36,19 @@ const getAllPlants = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+// Get Single Plant
+const getSinglePlant = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await PlantService.getSinglePlant(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Plant retrieved successfully!",
+    data: result,
+  });
+});
+
 // Update Plant
 const updatePlant = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -60,6 +73,7 @@ const deletePlant = catchAsync(async (req: Request, res: Response) => {
 });
 export const PlantController = {
   createPlant,
+  getSinglePlant,
   getAllPlants,
   updatePlant,
   deletePlant,

@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { prisma } from "../../shared/prisma";
 import { IPlant } from "./plant.interface";
 
@@ -30,6 +29,15 @@ const getAllPlants = async () => {
   return plants;
 };
 
+// Get single plant
+const getSinglePlant = async (id: string) => {
+  const plant = await prisma.plant.findUnique({
+    where: { id },
+  });
+
+  return plant;
+};
+
 // Update plant by id
 const updatePlant = async (id: string, payload: any) => {
   const updatedPlant = await prisma.plant.update({
@@ -38,6 +46,7 @@ const updatePlant = async (id: string, payload: any) => {
   });
   return updatedPlant;
 };
+
 // Delete plant by id
 const deletePlant = async (id: string) => {
   const deletedPlant = await prisma.plant.delete({
@@ -47,6 +56,7 @@ const deletePlant = async (id: string) => {
 };
 export const PlantService = {
   createPlant,
+  getSinglePlant,
   getAllPlants,
   updatePlant,
   deletePlant,

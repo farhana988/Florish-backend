@@ -12,7 +12,12 @@ router.post(
   validateRequest(createPlantSchema),
   PlantController.createPlant
 );
+// get all plant
 router.get("/", PlantController.getAllPlants);
+
+// get single plant by id
+router.get("/:id", PlantController.getSinglePlant);
+
 // Update Plant
 router.patch(
   "/update-plant/:id",
