@@ -40,6 +40,7 @@ const login = async (payload: { email: string; password: string }) => {
 const getCurrentUser = async (email: string) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: { email },
+    include: { addresses: true },
   });
 
   const { password, ...userWithoutPassword } = user;
