@@ -16,6 +16,7 @@ model Plant {
 
   cartItems   CartItem[]
   orderItems  OrderItem[]
+  wishlistItems  WishlistItem[]
   
   @@map("plants")
 }

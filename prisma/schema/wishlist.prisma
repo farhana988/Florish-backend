@@ -1,0 +1,31 @@
+model Wishlist {
+  id        String          @id @default(uuid())
+
+  userId    String          @unique
+  user      User            @relation(fields: [userId], references: [id])
+
+  items     WishlistItem[]
+
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@map("wishlists")
+}
+
+
+model WishlistItem {
+  id          String     @id @default(uuid())
+
+  wishlistId  String
+  wishlist    Wishlist   @relation(fields: [wishlistId], references: [id])
+
+  plantId     String
+  plant       Plant      @relation(fields: [plantId], references: [id])
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([wishlistId, plantId])
+
+  @@map("wishlist_items")
+}

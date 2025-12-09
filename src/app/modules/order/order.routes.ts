@@ -11,6 +11,6 @@ router.get("/", auth(), OrderController.getUserOrders);
 // Order details
 router.get("/:orderId", auth(), OrderController.getOrderDetails);
 // Payment
-router.post("/order-confirm", auth(), OrderController.confirmPayment);
+router.post("/confirm-payment", auth(), OrderController.confirmPayment);
 
 export const orderRoutes = router;

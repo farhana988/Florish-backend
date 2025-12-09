@@ -40,6 +40,10 @@ export const OrderService = {
       },
     });
 
+    await prisma.cartItem.deleteMany({
+      where: { cartId: cart.id },
+    });
+
     return { order, cart };
   },
 

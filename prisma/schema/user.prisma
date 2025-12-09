@@ -12,6 +12,7 @@ model User {
 
     plants             Plant[]   
     cart               Cart? 
+    wishlist           Wishlist?
     orders             Order[] 
     addresses          Address[] 
 
