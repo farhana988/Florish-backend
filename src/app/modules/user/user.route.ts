@@ -20,11 +20,8 @@ router.post(
 
 router.get("/all-user", auth(UserRole.SUPER_ADMIN), UserController.getAllUsers);
 
-router.patch(
-  "/change-password",
-  auth(), 
-  UserController.changePassword
-);
+// change pass
+router.patch("/change-password", auth(), UserController.changePassword);
 
 // UPDATE USER
 router.patch(
@@ -34,19 +31,18 @@ router.patch(
   UserController.updateUserInfo
 );
 
-// BLOCK USER 
+// BLOCK USER
 router.patch(
   "/block/:id",
   auth(UserRole.SUPER_ADMIN),
   UserController.blockUser
 );
 
-// MAKE ADMIN 
+// MAKE ADMIN
 router.patch(
   "/make-admin/:id",
-  auth(UserRole.SUPER_ADMIN), 
+  auth(UserRole.SUPER_ADMIN),
   UserController.makeAdmin
 );
-
 
 export const userRoutes = router;

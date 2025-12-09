@@ -11,5 +11,10 @@ router.patch(
   auth(),
   AddressController.updateAddress
 );
+router.delete(
+  "/delete-address/:addressId",
+  auth(),
+  AddressController.deleteAddress
+);
 
 export const addressRoutes = router;

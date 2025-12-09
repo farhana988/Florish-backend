@@ -43,4 +43,24 @@ export const AddressService = {
       data: { street, city, country },
     });
   },
+
+  deleteAddress: async (addressId: string, userId: string) => {
+    // Check if address exists
+    const address = await prisma.address.findUnique({
+      where: { id: addressId },
+    });
+
+    if (!address) {
+      throw new Error("Address not found");
+    }
+
+    // Owner check
+    if (address.userId !== userId) {
+      throw new Error("Unauthorized: You cannot delete this address");
+    }
+
+    return prisma.address.delete({
+      where: { id: addressId },
+    });
+  },
 };

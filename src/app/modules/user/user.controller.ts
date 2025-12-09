@@ -44,8 +44,12 @@ const changePassword = catchAsync(async (req, res) => {
 
 // UPDATE USER
 const updateUserInfo = catchAsync(async (req: Request, res: Response) => {
+  // If the client sends a JSON string in `data`, parse it
+  if (req.body.data) {
+    const parsed = JSON.parse(req.body.data);
+    req.body.name = parsed.name;
+  }
   const result = await UserService.updateUserInfo(req);
-
   sendResponse(res, {
     statusCode: 200,
     success: true,

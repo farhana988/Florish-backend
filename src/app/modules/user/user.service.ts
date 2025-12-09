@@ -22,7 +22,6 @@ const createUser = async (req: Request) => {
         email: req.body.email,
         password: hashPassword,
         profilePhoto: req.body.profilePhoto || null,
-        address: req.body.address || null,
       },
     });
     return user;
@@ -120,22 +119,29 @@ const changePassword = async (req: Request) => {
 const updateUserInfo = async (req: Request) => {
   const { id } = req.params;
 
+  // Only allow name and profilePhoto
   const allowedFields: Record<string, any> = {};
 
   if (req.body.name) allowedFields.name = req.body.name;
-  if (req.body.address) allowedFields.address = req.body.address;
 
   if (req.file) {
     const uploadResult = await fileUploader.uploadToCloudinary(req.file);
-    allowedFields.profilePhoto = uploadResult?.secure_url;
+    if (uploadResult?.secure_url) {
+      allowedFields.profilePhoto = uploadResult.secure_url;
+    }
   }
 
-  const result = await prisma.user.update({
+  // If no fields provided, throw error
+  if (Object.keys(allowedFields).length === 0) {
+    throw new Error("No valid fields provided for update");
+  }
+
+  const updatedUser = await prisma.user.update({
     where: { id },
     data: allowedFields,
   });
 
-  return result;
+  return updatedUser;
 };
 
 // BLOCK USER

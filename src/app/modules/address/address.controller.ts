@@ -53,8 +53,23 @@ const updateAddress = catchAsync(async (req: any, res) => {
   });
 });
 
+const deleteAddress = catchAsync(async (req: any, res) => {
+  const userId = req.user.id;
+  const { addressId } = req.params;
+
+  const deleted = await AddressService.deleteAddress(addressId, userId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Address deleted successfully",
+    data: deleted,
+  });
+});
+
 export const AddressController = {
   createAddress,
   getAddresses,
   updateAddress,
+  deleteAddress,
 };
