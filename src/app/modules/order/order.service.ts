@@ -1,4 +1,4 @@
-import { PaymentType } from "@prisma/client";
+import { OrderStatus, PaymentType } from "@prisma/client";
 import config from "../../../config";
 import { prisma } from "../../shared/prisma";
 
@@ -124,6 +124,54 @@ export const OrderService = {
         address: true,
         user: true,
       },
+    });
+  },
+
+  // Admin: Update order status
+  updateOrderStatus: async (orderId: string, newStatus: OrderStatus) => {
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) throw new Error("Order not found");
+
+    // Cannot update cancelled orders
+    if (order.status === "CANCELLED") {
+      throw new Error("Cannot update a cancelled order");
+    }
+    // Enforce correct sequence
+    const statusSequence: OrderStatus[] = [
+      "PENDING",
+      "PROCESSING",
+      "SHIPPED",
+      "COMPLETED",
+    ];
+    const currentIndex = statusSequence.indexOf(order.status);
+    const newIndex = statusSequence.indexOf(newStatus);
+
+    if (newIndex === -1) throw new Error("Invalid status");
+    if (newIndex !== currentIndex + 1) {
+      throw new Error(
+        `Cannot update status to ${
+          statusSequence[currentIndex + 1]
+        } before the current status ${order.status}`
+      );
+    }
+
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { status: newStatus },
+    });
+  },
+  // Admin: Cancel order (only if pending)
+  cancelOrder: async (orderId: string) => {
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) throw new Error("Order not found");
+
+    if (order.status !== "PENDING") {
+      throw new Error("Only pending orders can be cancelled");
+    }
+
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { status: "CANCELLED", paymentStatus: "CANCELLED" },
     });
   },
 };

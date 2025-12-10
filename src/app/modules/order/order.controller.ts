@@ -68,9 +68,38 @@ const getOrderDetails = catchAsync(
   }
 );
 
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  const order = await OrderService.updateOrderStatus(orderId, status);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order status updated",
+    data: order,
+  });
+});
+
+const cancelOrder = catchAsync(async (req: Request, res: Response) => {
+  const { orderId } = req.params;
+
+  const order = await OrderService.cancelOrder(orderId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order cancelled successfully",
+    data: order,
+  });
+});
+
 export const OrderController = {
   createOrder,
   confirmPayment,
   getUserOrders,
   getOrderDetails,
+  updateOrderStatus,
+  cancelOrder,
 };
