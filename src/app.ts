@@ -14,7 +14,11 @@ createSuperAdminIfNotExists();
 const app: Application = express();
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://florish-frontend.vercel.app",
+    ],
     credentials: true,
   })
 );
