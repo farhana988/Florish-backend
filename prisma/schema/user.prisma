@@ -14,7 +14,7 @@ model User {
     cart               Cart? 
     wishlist           Wishlist?
     orders             Order[] 
-    addresses          Address[] 
+    address            Address?   
 
     @@map("users")
 }

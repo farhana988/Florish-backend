@@ -31,7 +31,6 @@ async function createSuperAdminIfNotExists() {
         email: superAdminEmail,
         password: hashPassword,
         role: superAdminRole,
-        address: null,
       },
     });
 
