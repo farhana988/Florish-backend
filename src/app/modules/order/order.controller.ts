@@ -67,7 +67,16 @@ const getOrderDetails = catchAsync(
     });
   }
 );
-
+// Admin: List all orders
+const getAllOrders = catchAsync(async (req: Request, res: Response) => {
+  const orders = await OrderService.getAllOrders();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "All orders retrieved",
+    data: orders,
+  });
+});
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const { orderId } = req.params;
   const { status } = req.body;
@@ -102,4 +111,5 @@ export const OrderController = {
   getOrderDetails,
   updateOrderStatus,
   cancelOrder,
+  getAllOrders,
 };

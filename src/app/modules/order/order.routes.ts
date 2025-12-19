@@ -8,6 +8,9 @@ const router = Router();
 // Create order
 router.post("/create-order", auth(), OrderController.createOrder);
 
+// List all orders (admin only)
+router.get("/all-orders", auth(UserRole.ADMIN), OrderController.getAllOrders); // Add this line for listing all orders
+
 // List user's orders
 router.get("/", auth(), OrderController.getUserOrders);
 

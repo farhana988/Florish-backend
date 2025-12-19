@@ -127,6 +127,18 @@ export const OrderService = {
     });
   },
 
+  // Get all orders for the admin
+  getAllOrders: async () => {
+    return prisma.order.findMany({
+      include: {
+        items: { include: { plant: true } },
+        address: true,
+        user: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+
   // Admin: Update order status
   updateOrderStatus: async (orderId: string, newStatus: OrderStatus) => {
     const order = await prisma.order.findUnique({ where: { id: orderId } });
