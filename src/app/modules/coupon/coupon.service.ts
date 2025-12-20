@@ -26,4 +26,18 @@ export const CouponService = {
 
     return coupon;
   },
+  getAllCoupons: async () => {
+    const coupons = await prisma.coupon.findMany({
+      where: {
+        isActive: true,
+        expiryDate: {
+          gte: new Date(),
+        },
+      },
+      orderBy: {
+        expiryDate: "asc",
+      },
+    });
+    return coupons;
+  },
 };

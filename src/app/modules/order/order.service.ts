@@ -34,15 +34,17 @@ export const OrderService = {
       });
 
       if (!coupon || !coupon.isActive) {
-        throw new Error("Invalid coupon code");
+        throw new Error("This coupon is not valid.");
       }
 
       if (coupon.expiryDate < new Date()) {
-        throw new Error("Coupon has expired");
+        throw new Error("This coupon has already expired.");
       }
 
       if (coupon.minOrderValue && totalPrice < coupon.minOrderValue) {
-        throw new Error(`Minimum order value is ${coupon.minOrderValue}`);
+        throw new Error(
+          `Your order must be at least $${coupon.minOrderValue} to use this coupon.`
+        );
       }
 
       if (coupon.discountType === "PERCENTAGE") {

@@ -32,6 +32,18 @@ const createCoupon = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllCoupons = catchAsync(async (req: Request, res: Response) => {
+  const coupons = await CouponService.getAllCoupons();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Available coupons fetched successfully",
+    data: coupons,
+  });
+});
+
 export const CouponController = {
   createCoupon,
+  getAllCoupons,
 };
