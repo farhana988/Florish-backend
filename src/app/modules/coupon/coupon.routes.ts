@@ -9,5 +9,5 @@ router.post(
   auth(UserRole.ADMIN),
   CouponController.createCoupon
 );
-router.get("/all-coupons", auth(), CouponController.getAllCoupons);
+router.get("/all-coupons", CouponController.getAllCoupons);
 export const couponRoutes = router;
