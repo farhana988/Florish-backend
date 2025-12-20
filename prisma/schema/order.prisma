@@ -13,7 +13,11 @@ model Order {
 
   items       OrderItem[]
   totalPrice  Float
+  finalPrice  Float?
   status      OrderStatus  @default(PENDING)
+
+  couponId    String? 
+  coupon        Coupon?  @relation(fields: [couponId], references: [id])
 
   paymentType   PaymentType  @default(COD)
   transactionId String?      

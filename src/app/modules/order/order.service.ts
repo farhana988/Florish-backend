@@ -9,7 +9,8 @@ export const OrderService = {
   createOrder: async (
     userId: string,
     addressId: string,
-    paymentType: PaymentType
+    paymentType: PaymentType,
+    couponCode?: string
   ) => {
     const cart = await prisma.cart.findUnique({
       where: { userId },
@@ -23,13 +24,50 @@ export const OrderService = {
       0
     );
 
+    let discount = 0;
+    let couponId: string | null = null;
+
+    // 👉 Coupon validation
+    if (couponCode) {
+      const coupon = await prisma.coupon.findFirst({
+        where: { code: { equals: couponCode, mode: "insensitive" } },
+      });
+
+      if (!coupon || !coupon.isActive) {
+        throw new Error("Invalid coupon code");
+      }
+
+      if (coupon.expiryDate < new Date()) {
+        throw new Error("Coupon has expired");
+      }
+
+      if (coupon.minOrderValue && totalPrice < coupon.minOrderValue) {
+        throw new Error(`Minimum order value is ${coupon.minOrderValue}`);
+      }
+
+      if (coupon.discountType === "PERCENTAGE") {
+        discount = (totalPrice * coupon.discountValue) / 100;
+        if (coupon.maxDiscount) {
+          discount = Math.min(discount, coupon.maxDiscount);
+        }
+      } else {
+        discount = coupon.discountValue;
+      }
+
+      couponId = coupon.id;
+    }
+
+    const finalPrice = Math.max(totalPrice - discount, 0);
+
     const order = await prisma.order.create({
       data: {
         userId,
         addressId,
         cartId: cart.id,
         totalPrice,
+        finalPrice,
         paymentType,
+        couponId,
         items: {
           create: cart.items.map((item) => ({
             plantId: item.plantId,
@@ -172,6 +210,7 @@ export const OrderService = {
       data: { status: newStatus },
     });
   },
+
   // Admin: Cancel order (only if pending)
   cancelOrder: async (orderId: string) => {
     const order = await prisma.order.findUnique({ where: { id: orderId } });

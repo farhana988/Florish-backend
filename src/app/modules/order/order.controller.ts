@@ -6,12 +6,13 @@ import { OrderService } from "./order.service";
 const createOrder = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
     const userId = req.user.id;
-    const { addressId, paymentType } = req.body;
+    const { addressId, paymentType, couponCode } = req.body;
 
     const { order } = await OrderService.createOrder(
       userId,
       addressId,
-      paymentType
+      paymentType,
+      couponCode
     );
 
     let paymentURL = null;
@@ -77,6 +78,7 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
     data: orders,
   });
 });
+
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const { orderId } = req.params;
   const { status } = req.body;

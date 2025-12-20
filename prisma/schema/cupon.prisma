@@ -1,0 +1,18 @@
+model Coupon {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  discountType  DiscountType 
+  discountValue Float
+  minOrderValue Float?
+  maxDiscount   Float?
+  expiryDate    DateTime
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  
+  orders        Order[]
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
