@@ -27,11 +27,13 @@ export const CouponService = {
     return coupon;
   },
   getAllCoupons: async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const coupons = await prisma.coupon.findMany({
       where: {
         isActive: true,
         expiryDate: {
-          gte: new Date(),
+          gte: today,
         },
       },
       orderBy: {
